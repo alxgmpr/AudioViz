@@ -16,6 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -220,5 +221,15 @@ public class PlayerController implements Initializable {
         if (mediaPlayer != null) {
            mediaPlayer.stop(); 
         }
+    }
+    
+    @FXML
+    private void handleDragStart(MouseEvent event) {
+        System.out.println("Drag started");
+    }
+    
+    @FXML
+    private void handleDragStop(MouseEvent event) {
+        System.out.println("Drag stopped");
     }
 }
