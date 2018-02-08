@@ -69,6 +69,8 @@ public class PlayerController implements Initializable {
     @FXML
     private Slider timeSlider;
     
+    private boolean wasPlayingBeforeDrag;
+    
     private Media media;
     private MediaPlayer mediaPlayer;
     
@@ -220,16 +222,37 @@ public class PlayerController implements Initializable {
     private void handleStop(ActionEvent event) {
         if (mediaPlayer != null) {
            mediaPlayer.stop(); 
+           timeSlider.setValue(0.0);
         }
     }
     
     @FXML
     private void handleDragStart(MouseEvent event) {
-        System.out.println("Drag started");
+        if (mediaPlayer != null) {
+            // Allows us to seek a moment in the song while paused
+            if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+                wasPlayingBeforeDrag = true;
+            }
+            mediaPlayer.pause();
+            // Update the current time text as we drag the slider
+            Duration dur = new Duration(timeSlider.getValue());
+            mediaPlayer.seek(dur);
+            Duration ct = mediaPlayer.getCurrentTime();
+            double ms = ct.toMillis();
+            String timeInMs = String.format("%.1f", ms) + " ms";
+            currentText.setText(timeInMs);
+        }
     }
     
     @FXML
     private void handleDragStop(MouseEvent event) {
-        System.out.println("Drag stopped");
+        if (mediaPlayer != null) {
+            Duration dur = new Duration(timeSlider.getValue());
+            mediaPlayer.seek(dur);
+            if (wasPlayingBeforeDrag) {
+                mediaPlayer.play();
+            }
+            
+        }
     }
 }
