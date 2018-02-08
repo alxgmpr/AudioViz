@@ -165,9 +165,11 @@ public class PlayerController implements Initializable {
     
     private void handleReady() {
         Duration duration = mediaPlayer.getTotalDuration();
-        lengthText.setText(duration.toString());
+        String lengthInMs = String.format("%.1f", duration.toMillis()) + " ms";
+        lengthText.setText(lengthInMs);
         Duration ct = mediaPlayer.getCurrentTime();
-        currentText.setText(ct.toString());
+        String currentInMs = String.format("%.1f", ct.toMillis()) + " ms";
+        currentText.setText(currentInMs);
         currentVisualizer.start(numBands, vizPane);
         timeSlider.setMin(0);
         timeSlider.setMax(duration.toMillis());
@@ -182,7 +184,8 @@ public class PlayerController implements Initializable {
     private void handleUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
         Duration ct = mediaPlayer.getCurrentTime();
         double ms = ct.toMillis();
-        currentText.setText(Double.toString(ms));
+        String timeInMs = String.format("%.1f", ms) + " ms";
+        currentText.setText(timeInMs);
         timeSlider.setValue(ms);
         
         currentVisualizer.update(timestamp, duration, magnitudes, phases);
